@@ -23,21 +23,19 @@
   def run_game(attempt, grid)
       word_result = parse("https://wagon-dictionary.herokuapp.com/#{attempt}")
       if word_result["found"] && check_grid(attempt, grid)
-        result = { score: attempt.length, message: "Well Done!" }
-      elsif word_result["found"] && !check_grid(attempt, grid)
-        result = { score:  0, message: "not in the grid" }
+        result = { score: attempt.length, message: "Contrats! #{attempt.upcase} is a valid English word" }
       elsif !word_result["found"] && check_grid(attempt, grid)
-        result = { score:  0, message: "not an english word" }
+        result = { score: 0, message: "#{attempt.upcase} is not an english word" }
+      else
+        result = { score: 0, message: "#{attempt.upcase} is not in the grid" }
       end
       result
     end %>
 
 <% result = run_game(params[:word], params[:token])%>
-<%= "Congrats! #{params[:word].upcase} is a valid English word" %>
+<%= "#{result[:message]}" %>
 <br>
 <%= "Your score: #{result[:score]}" %>
-<br>
-<%= "#{result[:message]}" %>
 <br>
 <br>
 <a href="/" id="link">Play again</a>
