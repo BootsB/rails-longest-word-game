@@ -24,5 +24,19 @@
   width: 64px;
   align-items: center;
   justify-content: center;
-  margin-right: 16px
+  margin-right: 16px;
+  font-weight: bold;
  }
+ .center{
+  margin: 0 auto;
+}
+
+#link {
+  text-decoration: none;
+  color: white;
+  padding: 15px 40px;
+  font-weight: lighter;
+  border-radius: 8px;
+  background-color: rgb(125, 197, 248);
+  transition: background 0.3s ease;
+}

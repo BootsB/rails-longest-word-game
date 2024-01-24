@@ -1,0 +1,43 @@
+<% require "open-uri" %>
+  <% require "json" %>
+
+<%
+  def check_grid(attempt, grid)
+    used_letters = []
+
+    attempt.upcase.chars.all? do |char|
+      if grid.include?(char) && (used_letters.count(char) < grid.count(char))
+        used_letters << char
+        true
+      else
+        false
+      end
+    end
+  end
+
+  def parse(url)
+    serialised = URI.open(url).read
+    JSON.parse(serialised)
+  end
+
+  def run_game(attempt, grid)
+      word_result = parse("https://wagon-dictionary.herokuapp.com/#{attempt}")
+      if word_result["found"] && check_grid(attempt, grid)
+        result = { score: attempt.length, message: "Well Done!" }
+      elsif word_result["found"] && !check_grid(attempt, grid)
+        result = { score:  0, message: "not in the grid" }
+      elsif !word_result["found"] && check_grid(attempt, grid)
+        result = { score:  0, message: "not an english word" }
+      end
+      result
+    end %>
+
+<% result = run_game(params[:word], params[:token])%>
+<%= "Congrats! #{params[:word].upcase} is a valid English word" %>
+<br>
+<%= "Your score: #{result[:score]}" %>
+<br>
+<%= "#{result[:message]}" %>
+<br>
+<br>
+<a href="/" id="link">Play again</a>
