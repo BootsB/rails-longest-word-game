@@ -10,6 +10,7 @@
       <input id="word" type="text" name="word" class="form-control mb-1"  >
       <input type="submit" value="Play!" class="form-control" >
       <input id="token" name="token" type="hidden" value="<%= @letters %>" />
+      <input id="start" name="start" type="hidden" value="<%= Time.now %>" />
       <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
     </form>
   </div>

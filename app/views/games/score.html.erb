@@ -1,6 +1,7 @@
 <% require "open-uri" %>
   <% require "json" %>
 
+<% endt = Time.now%>
 <%
   def check_grid(attempt, grid)
     used_letters = []
@@ -20,10 +21,11 @@
     JSON.parse(serialised)
   end
 
-  def run_game(attempt, grid)
+  def run_game(attempt, grid, start_time, end_time)
       word_result = parse("https://wagon-dictionary.herokuapp.com/#{attempt}")
       if word_result["found"] && check_grid(attempt, grid)
-        result = { score: attempt.length, message: "Contrats! #{attempt.upcase} is a valid English word" }
+      time_taken = (end_time - DateTime.parse(start_time))
+        result = { score: 10 - time_taken + attempt.size, message: "Contrats! #{attempt.upcase} is a valid English word", time: time_taken }
       elsif !word_result["found"] && check_grid(attempt, grid)
         result = { score: 0, message: "#{attempt.upcase} is not an english word" }
       else
@@ -32,10 +34,12 @@
       result
     end %>
 
-<% result = run_game(params[:word], params[:token])%>
+<% result = run_game(params[:word], params[:token], params[:start], endt)%>
 <%= "#{result[:message]}" %>
 <br>
-<%= "Your score: #{result[:score]}" %>
+<%= "Your score: #{result[:score].round(2)}" %>
+<br>
+<%= "Time taken: #{result[:time].round(2)}" %>
 <br>
 <br>
 <a href="/" id="link">Play again</a>
